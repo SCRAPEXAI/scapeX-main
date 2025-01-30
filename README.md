@@ -1,29 +1,22 @@
-# Scrapfly SDK
+# scrapeX SDK
 
 ## Installation
 
-`pip install scrapfly-sdk`
+`pip install scrapex-sdk`
 
 You can also install extra dependencies
 
-* `pip install "scrapfly-sdk[seepdup]"` for performance improvement
-* `pip install "scrapfly-sdk[concurrency]"` for concurrency out of the box (asyncio / thread)
-* `pip install "scrapfly-sdk[scrapy]"` for scrapy integration
-* `pip install "scrapfly-sdk[all]"` Everything!
+* `pip install "scrapex-sdk[seepdup]"` for performance improvement
+* `pip install "scrapex-sdk[concurrency]"` for concurrency out of the box (asyncio / thread)
+* `pip install "scrapex-sdk[scrapy]"` for scrapy integration
+* `pip install "scrapex-sdk[all]"` Everything!
 
 For use of built-in HTML parser (via `ScrapeApiResponse.selector` property) additional requirement of either [parsel](https://pypi.org/project/parsel/) or [scrapy](https://pypi.org/project/Scrapy/) is required.
 
 For reference of usage or examples, please checkout the folder `/examples` in this repository.
 
-This SDK cover the following Scrapfly API endpoints:
 
-* [Web Scraping API](https://scrapfly.io/docs/onboarding#web-scraping-api)
-* [Extraction API](https://scrapfly.io/docs/onboarding#extraction-api)
-* [Screenshot API](https://scrapfly.io/docs/onboarding#screenshot-api)
-
-## Integrations  
-
-Scrapfly Python SDKs are integrated with [LlamaIndex](https://www.llamaindex.ai/) and [LangChain](https://www.langchain.com/). Both framework allows training Large Language Models (LLMs) using augmented context.
+scrapeX Python SDKs are integrated with [LlamaIndex](https://www.llamaindex.ai/) and [LangChain](https://www.langchain.com/). Both framework allows training Large Language Models (LLMs) using augmented context.
 
 This augmented context is approached by training LLMs on top of private or domain-specific data for common use cases:
 - Question-Answering Chatbots (commonly referred to as RAG systems, which stands for "Retrieval-Augmented Generation")
@@ -31,32 +24,32 @@ This augmented context is approached by training LLMs on top of private or domai
 - Autonomous Agents that can perform research and take actions
 <br>  
 
-In the context of web scraping, web page data can be extracted as Text or Markdown using [Scrapfly's format feature](https://scrapfly.io/docs/scrape-api/specification#api_param_format) to train LLMs with the scraped data.
+In the context of web scraping, web page data can be extracted as Text or Markdown using [scrapeX's format feature](https://scrapeX.io/docs/scrape-api/specification#api_param_format) to train LLMs with the scraped data.
 
 ### LlamaIndex
 
 #### Installation
-Install `llama-index`, `llama-index-readers-web`, and `scrapfly-sdk` using pip:
+Install `llama-index`, `llama-index-readers-web`, and `scrapeX-sdk` using pip:
 ```shell
-pip install llama-index llama-index-readers-web scrapfly-sdk
+pip install llama-index llama-index-readers-web scrapeX-sdk
 ```
 
 #### Usage
-Scrapfly is available at LlamaIndex as a [data connector](https://docs.llamaindex.ai/en/stable/module_guides/loading/connector/), known as a `Reader`. This reader is used to gather a web page data into a `Document` representation, which can be used with the LLM directly. Below is an example of building a RAG system using LlamaIndex and scraped data. See the [LlamaIndex use cases](https://docs.llamaindex.ai/en/stable/use_cases/) for more.
+scrapeX is available at LlamaIndex as a [data connector](https://docs.llamaindex.ai/en/stable/module_guides/loading/connector/), known as a `Reader`. This reader is used to gather a web page data into a `Document` representation, which can be used with the LLM directly. Below is an example of building a RAG system using LlamaIndex and scraped data. See the [LlamaIndex use cases](https://docs.llamaindex.ai/en/stable/use_cases/) for more.
 ```python
 import os
 
-from llama_index.readers.web import ScrapflyReader
+from llama_index.readers.web import scrapeXReader
 from llama_index.core import VectorStoreIndex
 
-# Initiate ScrapflyReader with your Scrapfly API key
-scrapfly_reader = ScrapflyReader(
-    api_key="Your Scrapfly API key",  # Get your API key from https://www.scrapfly.io/
+# Initiate ScrapeXReader with your scrapeX API key
+scrapeX_reader = scrapeXReader(
+    api_key="Your scrapeX API key",  # Get your API key from https://www.scrapeX.io/
     ignore_scrape_failures=True,  # Ignore unprocessable web pages and log their exceptions
 )
 
 # Load documents from URLs as markdown
-documents = scrapfly_reader.load_data(
+documents = scrapeX_reader.load_data(
     urls=["https://web-scraping.dev/products"]
 )
 
@@ -74,17 +67,17 @@ print(response)
 "The flavor of the dark energy potion is bold cherry cola."
 ```
 
-The `load_data` function accepts a ScrapeConfig object to use the desired Scrapfly API parameters:
+The `load_data` function accepts a ScrapeConfig object to use the desired scrapeX API parameters:
 ```python
-from llama_index.readers.web import ScrapflyReader
+from llama_index.readers.web import scrapeXReader
 
-# Initiate ScrapflyReader with your ScrapFly API key
-scrapfly_reader = ScrapflyReader(
-    api_key="Your Scrapfly API key",  # Get your API key from https://www.scrapfly.io/
+# Initiate scrapeXReader with your scrapeX API key
+scrapeX_reader = scrapeXReader(
+    api_key="Your scrapeX API key",  # Get your API key from https://www.scrapeX.io/
     ignore_scrape_failures=True,  # Ignore unprocessable web pages and log their exceptions
 )
 
-scrapfly_scrape_config = {
+scrapeX_scrape_config = {
     "asp": True,  # Bypass scraping blocking and antibot solutions, like Cloudflare
     "render_js": True,  # Enable JavaScript rendering with a cloud headless browser
     "proxy_pool": "public_residential_pool",  # Select a proxy pool (datacenter or residnetial)
@@ -94,9 +87,9 @@ scrapfly_scrape_config = {
 }
 
 # Load documents from URLs as markdown
-documents = scrapfly_reader.load_data(
+documents = scrapeX_reader.load_data(
     urls=["https://web-scraping.dev/products"],
-    scrape_config=scrapfly_scrape_config,  # Pass the scrape config
+    scrape_config=scrapeX_scrape_config,  # Pass the scrape config
     scrape_format="markdown",  # The scrape result format, either `markdown`(default) or `text`
 )
 ```
@@ -104,13 +97,13 @@ documents = scrapfly_reader.load_data(
 ### LangChain
 
 #### Installation
-Install `langchain`, `langchain-community`, and `scrapfly-sdk` using pip:
+Install `langchain`, `langchain-community`, and `scrapeX-sdk` using pip:
 ```shell
-pip install langchain langchain-community scrapfly-sdk
+pip install langchain langchain-community scrapeX-sdk
 ```
 
 #### Usage
-Scrapfly is available at LangChain as a [document loader](https://python.langchain.com/v0.2/docs/concepts/#document-loaders), known as a `Loader`. This reader is used to gather a web page data into `Document` representation, which canbe used with the LLM after a few operations. Below is an example of building a RAG system with LangChain using scraped data, see [LangChain tutorials](https://python.langchain.com/v0.2/docs/tutorials/) for further use cases.
+scrapeX is available at LangChain as a [document loader](https://python.langchain.com/v0.2/docs/concepts/#document-loaders), known as a `Loader`. This reader is used to gather a web page data into `Document` representation, which canbe used with the LLM after a few operations. Below is an example of building a RAG system with LangChain using scraped data, see [LangChain tutorials](https://python.langchain.com/v0.2/docs/tutorials/) for further use cases.
 ```python
 import os
 
@@ -120,17 +113,17 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI # pip install langchain_openai
 from langchain_text_splitters import RecursiveCharacterTextSplitter # pip install langchain_text_splitters
-from langchain_community.document_loaders import ScrapflyLoader
+from langchain_community.document_loaders import scrapeXLoader
 
 
-scrapfly_loader = ScrapflyLoader(
+scrapeX_loader = scrapeXLoader(
     ["https://web-scraping.dev/products"],
-    api_key="Your Scrapfly API key",  # Get your API key from https://www.scrapfly.io/
+    api_key="Your scrapeX API key",  # Get your API key from https://www.scrapeX.io/
     continue_on_failure=True,  # Ignore unprocessable web pages and log their exceptions
 )
 
 # Load documents from URLs as markdown
-documents = scrapfly_loader.load()
+documents = scrapeX_loader.load()
 
 # This example uses OpenAI. For more see: https://python.langchain.com/v0.2/docs/integrations/platforms/
 os.environ["OPENAI_API_KEY"] = "Your OpenAI key"
@@ -159,11 +152,11 @@ print(response)
 "The flavor of the Dark Energy Potion is bold cherry cola."
 ```
 
-To use the full Scrapfly features with LangChain, pass a ScrapeConfig object to the `ScrapflyLoader`:
+To use the full scrapeX features with LangChain, pass a ScrapeConfig object to the `scrapeXLoader`:
 ```python
-from langchain_community.document_loaders import ScrapflyLoader
+from langchain_community.document_loaders import scrapeXLoader
 
-scrapfly_scrape_config = {
+scrapeX_scrape_config = {
     "asp": True,  # Bypass scraping blocking and antibot solutions, like Cloudflare
     "render_js": True,  # Enable JavaScript rendering with a cloud headless browser
     "proxy_pool": "public_residential_pool",  # Select a proxy pool (datacenter or residnetial)
@@ -172,26 +165,26 @@ scrapfly_scrape_config = {
     "js": "",  # Execute custom JavaScript code by the headless browser
 }
 
-scrapfly_loader = ScrapflyLoader(
+scrapeX_loader = scrapeXLoader(
     ["https://web-scraping.dev/products"],
-    api_key="Your Scrapfly API key",  # Get your API key from https://www.scrapfly.io/
+    api_key="Your scrapeX API key",  # Get your API key from https://www.scrapeX.io/
     continue_on_failure=True,  # Ignore unprocessable web pages and log their exceptions
-    scrape_config=scrapfly_scrape_config,  # Pass the scrape_config object
+    scrape_config=scrapeX_scrape_config,  # Pass the scrape_config object
     scrape_format="markdown",  # The scrape result format, either `markdown`(default) or `text`
 )
 
 # Load documents from URLs as markdown
-documents = scrapfly_loader.load()
+documents = scrapeX_loader.load()
 print(documents)
 ```
 ## Get Your API Key
 
-You can create a free account on [Scrapfly](https://scrapfly.io/register) to get your API Key.
+You can create a free account on [scrapeX](https://scrapeX.io/register) to get your API Key.
 
-* [Usage](https://scrapfly.io/docs/sdk/python)
-* [Python API](https://scrapfly.github.io/python-scrapfly/scrapfly)
-* [Open API 3 Spec](https://scrapfly.io/docs/openapi#get-/scrape) 
-* [Scrapy Integration](https://scrapfly.io/docs/sdk/scrapy)
+* [Usage](https://scrapeX.io/docs/sdk/python)
+* [Python API](https://scrapeX.github.io/python-scrapeX/scrapeX)
+* [Open API 3 Spec](https://scrapeX.io/docs/openapi#get-/scrape) 
+* [Scrapy Integration](https://scrapeX.io/docs/sdk/scrapy)
 
 ## Migration
 
@@ -199,11 +192,11 @@ You can create a free account on [Scrapfly](https://scrapfly.io/register) to get
 
 asyncio-pool dependency has been dropped
 
-`scrapfly.concurrent_scrape` is now an async generator. If the concurrency is `None` or not defined, the max concurrency allowed by
+`scrapeX.concurrent_scrape` is now an async generator. If the concurrency is `None` or not defined, the max concurrency allowed by
 your current subscription is used.
 
 ```python
-    async for result in scrapfly.concurrent_scrape(concurrency=10, scrape_configs=[ScrapConfig(...), ...]):
+    async for result in scrapeX.concurrent_scrape(concurrency=10, scrape_configs=[ScrapConfig(...), ...]):
         print(result)
 ```
 
